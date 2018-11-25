@@ -1,6 +1,6 @@
-package com.locydrasgon.abf.commands;
-import com.locydrasgon.abf.AudioBuffer;
-import com.locydrasgon.abf.api.AudioBufferAPI;
+package com.locydragon.abf.commands;
+import com.locydragon.abf.AudioBuffer;
+import com.locydragon.abf.api.AudioBufferAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

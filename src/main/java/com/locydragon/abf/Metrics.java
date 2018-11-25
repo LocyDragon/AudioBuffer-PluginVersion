@@ -1,4 +1,4 @@
-package com.locydrasgon.abf;
+package com.locydragon.abf;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;

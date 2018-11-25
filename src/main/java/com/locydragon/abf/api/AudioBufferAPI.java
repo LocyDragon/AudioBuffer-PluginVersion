@@ -1,8 +1,8 @@
-package com.locydrasgon.abf.api;
+package com.locydragon.abf.api;
 
-import com.locydrasgon.abf.AudioBuffer;
-import com.locydrasgon.abf.AudioInput;
-import com.locydrasgon.abf.QueueJob;
+import com.locydragon.abf.AudioBuffer;
+import com.locydragon.abf.AudioInput;
+import com.locydragon.abf.QueueJob;
 import org.bukkit.entity.Player;
 
 import java.math.BigInteger;

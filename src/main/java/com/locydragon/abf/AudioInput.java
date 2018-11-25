@@ -1,4 +1,4 @@
-package com.locydrasgon.abf;
+package com.locydragon.abf;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;

@@ -1,6 +1,6 @@
-package com.locydrasgon.abf;
+package com.locydragon.abf;
 
-import com.locydrasgon.abf.commands.AudioCommand;
+import com.locydragon.abf.commands.AudioCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
