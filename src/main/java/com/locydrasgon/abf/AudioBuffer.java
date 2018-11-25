@@ -1,5 +1,6 @@
 package com.locydrasgon.abf;
 
+import com.locydrasgon.abf.commands.AudioCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,6 +30,12 @@ public class AudioBuffer extends JavaPlugin {
 				e.printStackTrace();
 			}
 		}
+		Bukkit.getPluginCommand("abf").setExecutor(new AudioCommand());
+		Bukkit.getPluginCommand("ab").setExecutor(new AudioCommand());
+		Bukkit.getLogger().info("=====> 你正在使用AudioBuffer");
+		Bukkit.getLogger().info("=====> 新一代音乐|RPG音效播放器!");
+		Bukkit.getLogger().info("=====> 作者: 绿毛 -> QQ2424441676");
+		Bukkit.getLogger().info("=====> 本插件永久免费，如果你是通过购买渠道获取的，请小心谨慎!");
 	}
 
 	public static void reloadConfiguration() {
