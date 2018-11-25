@@ -36,6 +36,7 @@ public class AudioBuffer extends JavaPlugin {
 		Bukkit.getLogger().info("=====> 新一代音乐|RPG音效播放器!");
 		Bukkit.getLogger().info("=====> 作者: 绿毛 -> QQ2424441676");
 		Bukkit.getLogger().info("=====> 本插件永久免费，如果你是通过购买渠道获取的，请小心谨慎!");
+		new Metrics(this);
 	}
 
 	public static void reloadConfiguration() {
