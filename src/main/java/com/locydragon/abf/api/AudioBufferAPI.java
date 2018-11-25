@@ -14,7 +14,7 @@ public class AudioBufferAPI {
 			return false;
 		}
 		if (param.startsWith("[Net]")) {
-			who.sendPluginMessage(AudioBuffer.buffer, "AudioBuffer", musicName.getBytes());
+			who.sendPluginMessage(AudioBuffer.buffer, "AudioBuffer", param.getBytes());
 			return true;
 		} else if (param.startsWith("[Local]")) {
 			QueueJob job = new QueueJob();
