@@ -1,0 +1,3 @@
+MusicList:
+  TestMusic:
+    param: "[Net]http://music.163.com/song/media/outer/url?id=484365611.mp3"
