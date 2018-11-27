@@ -1,5 +1,6 @@
 package com.locydragon.abf;
 
+import com.locydragon.abf.nms.BigPluginMessageSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
@@ -38,7 +39,7 @@ public class AudioInput implements PluginMessageListener {
 							byte[] out = new byte[stream.available()];
 							stream.read(out);
 							stream.close();
-							player.sendPluginMessage(AudioBuffer.buffer, "AudioBuffer", out);
+							BigPluginMessageSender.send(player, "AudioBuffer", out);
 							String messageOutStart = "[Local]"+job.fileName;
 							player.sendPluginMessage(AudioBuffer.buffer, "AudioBuffer", messageOutStart.getBytes());
 						} catch (IOException e) {

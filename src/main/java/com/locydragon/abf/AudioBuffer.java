@@ -1,6 +1,7 @@
 package com.locydragon.abf;
 
 import com.locydragon.abf.commands.AudioCommand;
+import com.locydragon.abf.listener.WorldChangeListener;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,6 +38,7 @@ public class AudioBuffer extends JavaPlugin {
 		Bukkit.getLogger().info("=====> 作者: 绿毛 -> QQ2424441676");
 		Bukkit.getLogger().info("=====> 本插件永久免费，如果你是通过购买渠道获取的，请小心谨慎!");
 		new Metrics(this);
+		Bukkit.getPluginManager().registerEvents(new WorldChangeListener(), this);
 	}
 
 	public static void reloadConfiguration() {

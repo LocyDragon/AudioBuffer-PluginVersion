@@ -9,7 +9,10 @@ import java.math.BigInteger;
 
 public class AudioBufferAPI {
 	public static boolean playFor(Player who, String musicName) {
-		String param = AudioBuffer.config.getString("MusicList."+musicName+".param", null);
+		return playForByParam(who, AudioBuffer.config.getString("MusicList."+musicName+".param", null));
+	}
+
+	public static boolean playForByParam(Player who, String param) {
 		if (param == null) {
 			return false;
 		}
