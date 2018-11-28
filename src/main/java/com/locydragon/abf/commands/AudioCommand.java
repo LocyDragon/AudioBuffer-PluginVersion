@@ -141,6 +141,21 @@ public class AudioCommand implements CommandExecutor {
 			} else {
 				sender.sendMessage(ChatColor.RED+"请使用/abf playSelf [音乐名称] ——给自己播放一个音乐");
 			}
+		} else if (args[0].equalsIgnoreCase("cleanCache") && sender.hasPermission("AudioBuffer.admin")) {
+			if (args.length == 2) {
+				String musicName = args[1];
+				String param = AudioBuffer.config.getString("MusicList."+musicName+".param", null);
+				AudioBuffer.save.set(param, -1);
+				sender.sendMessage(ChatColor.GREEN + "清除缓存成功了.");
+			} else {
+				sender.sendMessage(ChatColor.RED+"请使用/abf cleanCache [音乐名称] ——清理一个音乐的缓存");
+			}
+		} else if (args[0].equalsIgnoreCase("loopFor")) {
+			if (args.length == 3) {
+
+			} else {
+				sender.sendMessage(ChatColor.RED + "请使用/abf loopFor [玩家名称} [音乐名称] ——为一个玩家循环播放音乐.");
+			}
 		}
 		return false;
 	}
