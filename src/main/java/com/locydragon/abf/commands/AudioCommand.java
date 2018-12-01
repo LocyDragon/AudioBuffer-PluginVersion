@@ -169,6 +169,31 @@ public class AudioCommand implements CommandExecutor {
 			} else {
 				sender.sendMessage(ChatColor.RED + "请使用/abf loopFor [玩家名称] [音乐名称] ——为一个玩家循环播放音乐.");
 			}
+		} else if (args[0].equalsIgnoreCase("stopAndPlay")) {
+			if (args.length == 3) {
+				String playerName = args[1];
+				String musicName = args[2];
+				Player target = Bukkit.getPlayer(playerName);
+				if (target == null) {
+					sender.sendMessage(ChatColor.RED+"你指定的玩家不在线或不存在!");
+					return false;
+				}
+				AudioBufferAPI.stopPlaying(target);
+				if (!AudioBufferAPI.playFor(target, musicName)){
+					sender.sendMessage(ChatColor.RED+"你指定音乐名称不存在或参数不符合规范!");
+					return false;
+				}
+			} else {
+				sender.sendMessage(ChatColor.RED+"请使用/abf stopAndPlay [玩家名字] [音乐名称] ——来为某个玩家播放(先暂停)一个音乐!");
+			}
+		} else if (args[0].equalsIgnoreCase("stopAndPlaySelf")) {
+			if (args.length == 2) {
+				Player target = (Player)sender;
+				AudioBufferAPI.stopPlaying(target);
+				AudioBufferAPI.playFor(target, args[1]);
+			} else {
+				sender.sendMessage(ChatColor.RED+"请使用/abf stopAndPlaySelf [音乐名称] ——给自己播放(停下后)一个音乐");
+			}
 		}
 		return false;
 	}
