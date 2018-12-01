@@ -12,6 +12,8 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Random;
 
 public class AudioBufferAPI {
@@ -24,7 +26,14 @@ public class AudioBufferAPI {
 			return false;
 		}
 		if (param.startsWith("[Net]")) {
-			who.sendPluginMessage(AudioBuffer.buffer, "AudioBuffer", param.getBytes());
+			Thread sync = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					String message = realURL(param.replace("[Net]", ""));
+					who.sendPluginMessage(AudioBuffer.buffer, "AudioBuffer", ("[Net]" + message).getBytes());
+				}
+			});
+			sync.start();
 			return true;
 		} else if (param.startsWith("[Local]")) {
 			QueueJob job = new QueueJob();
@@ -59,7 +68,7 @@ public class AudioBufferAPI {
 			File audioFile = new File(".//plugins//AudioBuffer//Music//"+message);
 			return AudioReaderUtil.getAudioPlayTime(audioFile.getAbsolutePath());
 		} else if (param.startsWith("[Net]")) {
-			String message = param.replace("[Net]", "");
+			String message = realURL(param.replace("[Net]", ""));
 			String downloadCacheName = new Random().nextInt(Integer.MAX_VALUE) + ".mp3";
 			NetworkHelper.downloadHttpUrl(message, ".//plugins//AudioBuffer//Music//Download//", downloadCacheName);
 			File downloadedFile = new File(".//plugins//AudioBuffer//Music//Download//" + downloadCacheName);
@@ -82,8 +91,15 @@ public class AudioBufferAPI {
 		return result;
 	}
 
-	public static boolean loopPlayer(Player who, int secondDelay, String musicURL) {
-		LoopThread targetThread = new LoopThread(musicURL, secondDelay, who);
+	public static boolean loopPlayer(Player who, String musicName) {
+		if (PlayerLoopThreadAche.loopThreadAche.get(who.getName()) != null) {
+			LoopThread thread = PlayerLoopThreadAche.loopThreadAche.get(who.getName());
+			thread.stopSafely();
+			PlayerLoopThreadAche.loopThreadAche.remove(who.getName());
+			stopPlaying(who);
+		}
+		LoopThread targetThread = new LoopThread(musicName, getAudioLengthByParamQuickly
+				(AudioBuffer.config.getString("MusicList."+musicName+".param", null)), who);
 		targetThread.start();
 		PlayerLoopThreadAche.loopThreadAche.put(who.getName(), targetThread);
 		return true;
@@ -102,5 +118,26 @@ public class AudioBufferAPI {
 			e.printStackTrace();
 		}
 		return newAudioLength;
+	}
+
+	private static String realURL(String path) {
+		try {
+			String urlNameString = path;
+			URL realUrl = new URL(urlNameString);
+			// 打开和URL之间的连接
+			URLConnection connection = realUrl.openConnection();
+			// 设置通用的请求属性
+			connection.setRequestProperty("accept", "*/*");
+			connection.setRequestProperty("connection", "Keep-Alive");
+			connection.setRequestProperty("user-agent",
+					"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+			// 建立实际的连接
+			connection.connect();
+			connection.getContent();
+			return connection.getURL().toString();
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		return null;
 	}
 }

@@ -18,6 +18,9 @@ public class LoopThread extends Thread {
 	@Override
 	public void run() {
 		while (!this.stop) {
+			if (this.who == null) {
+				break;
+			}
 			AudioBufferAPI.playFor(this.who, this.musicUrl);
 			try {
 				Thread.sleep(this.period * 1000);

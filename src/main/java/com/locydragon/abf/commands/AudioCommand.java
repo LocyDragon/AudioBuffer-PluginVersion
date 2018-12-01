@@ -2,6 +2,7 @@ package com.locydragon.abf.commands;
 import com.locydragon.abf.AudioBuffer;
 import com.locydragon.abf.api.AudioBufferAPI;
 import com.locydragon.abf.listener.WorldChangeListener;
+import com.locydragon.abf.listener.core.PlayerLoopThreadAche;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -47,6 +48,11 @@ public class AudioCommand implements CommandExecutor {
 					sender.sendMessage(ChatColor.RED+"你输入的内容不是一个数字.");
 					return false;
 				}
+				if (PlayerLoopThreadAche.loopThreadAche.containsKey(playerName)) {
+					sender.sendMessage(ChatColor.RED+"循环播放时无法改变音量.");
+					return false;
+				}
+				AudioBufferAPI.stopPlaying(target);
 				AudioBufferAPI.setVolume(target, Float.valueOf(volume));
 			} else {
 				sender.sendMessage(ChatColor.RED+"请使用/abf volume [玩家名字] [音量] ——为某个玩家调节音量.");
@@ -152,9 +158,16 @@ public class AudioCommand implements CommandExecutor {
 			}
 		} else if (args[0].equalsIgnoreCase("loopFor")) {
 			if (args.length == 3) {
-
+				String playerName = args[1];
+				String musicName = args[2];
+				Player target = Bukkit.getPlayer(playerName);
+				if (target == null) {
+					sender.sendMessage(ChatColor.RED+"你指定的玩家不在线或不存在!");
+					return false;
+				}
+				AudioBufferAPI.loopPlayer(target, musicName);
 			} else {
-				sender.sendMessage(ChatColor.RED + "请使用/abf loopFor [玩家名称} [音乐名称] ——为一个玩家循环播放音乐.");
+				sender.sendMessage(ChatColor.RED + "请使用/abf loopFor [玩家名称] [音乐名称] ——为一个玩家循环播放音乐.");
 			}
 		}
 		return false;
