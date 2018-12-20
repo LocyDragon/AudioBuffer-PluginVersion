@@ -12,6 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
+
 public class AudioCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
@@ -69,6 +71,9 @@ public class AudioCommand implements CommandExecutor {
 				sender.sendMessage(ChatColor.RED+"请使用/abf stop [玩家名字] ——来为某个玩家停止播放音乐!");
 			}
 		} else if (args[0].equalsIgnoreCase("reload") && sender.hasPermission("AudioBuffer.admin")) {
+			for (Player online : Bukkit.getOnlinePlayers()) {
+				AudioBufferAPI.stopPlaying(online);
+			}
 			AudioBuffer.reloadConfiguration();
 			sender.sendMessage(ChatColor.GREEN+"重载插件成功!");
 		} else if (args[0].equalsIgnoreCase("stopAll") && sender.hasPermission("AudioBuffer.admin")) {
@@ -96,6 +101,12 @@ public class AudioCommand implements CommandExecutor {
 					AudioBufferAPI.playFor(inWorld, args[2]);
 				}
 				WorldChangeListener.playInWorld.put(targetWorld.getName(), args[2]);
+				AudioBuffer.worldMusic.set(targetWorld.getName(), args[2]);
+				try {
+					AudioBuffer.worldMusic.save(".//plugins//AudioBuffer//Cache//WorldMusic.abf");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			} else {
 				sender.sendMessage(ChatColor.RED+"请使用/abf playInWorld [世界名称] [音乐名称] ——在一个世界里播放音乐!");
 			}

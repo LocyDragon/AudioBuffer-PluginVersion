@@ -12,11 +12,15 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Random;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class AudioBufferAPI {
+	private static Integer warningTimes = 5;
+	private static Executor pool = Executors.newCachedThreadPool();
 	public static boolean playFor(Player who, String musicName) {
 		return playForByParam(who, AudioBuffer.config.getString("MusicList."+musicName+".param", null));
 	}
@@ -26,14 +30,10 @@ public class AudioBufferAPI {
 			return false;
 		}
 		if (param.startsWith("[Net]")) {
-			Thread sync = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					String message = realURL(param.replace("[Net]", ""));
-					who.sendPluginMessage(AudioBuffer.buffer, "AudioBuffer", ("[Net]" + message).getBytes());
-				}
+			pool.execute(() -> {
+				String message = realURL(param.replace("[Net]", ""));
+				who.sendPluginMessage(AudioBuffer.buffer, "AudioBuffer", ("[Net]" + message).getBytes());
 			});
-			sync.start();
 			return true;
 		} else if (param.startsWith("[Local]")) {
 			QueueJob job = new QueueJob();
@@ -121,11 +121,12 @@ public class AudioBufferAPI {
 	}
 
 	private static String realURL(String path) {
+		HttpURLConnection connection = null;
 		try {
 			String urlNameString = path;
 			URL realUrl = new URL(urlNameString);
 			// 打开和URL之间的连接
-			URLConnection connection = realUrl.openConnection();
+			connection = (HttpURLConnection)realUrl.openConnection();
 			// 设置通用的请求属性
 			connection.setRequestProperty("accept", "*/*");
 			connection.setRequestProperty("connection", "Keep-Alive");
@@ -135,9 +136,20 @@ public class AudioBufferAPI {
 			connection.connect();
 			connection.getContent();
 			return connection.getURL().toString();
-		} catch (Exception exc) {
-			exc.printStackTrace();
+		} catch (IOException exc) {
+			if (connection == null) {
+				exc.printStackTrace();
+				return null;
+			}
+			if (warningTimes > 0) {
+				warningTimes--;
+				AudioBuffer.buffer.getLogger().warning("> 警告: 网页请求反馈出错.我们自动修复了这个问题.如果反复出现这个提醒,请联系作者.");
+			}
+			return connection.getURL().toString();
 		}
-		return null;
+	}
+
+	public static boolean hasMusic(String musicName) {
+		return AudioBuffer.config.getString("MusicList."+musicName+".param", null) != null;
 	}
 }
