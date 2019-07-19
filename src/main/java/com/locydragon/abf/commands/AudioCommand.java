@@ -122,6 +122,12 @@ public class AudioCommand implements CommandExecutor {
 					AudioBufferAPI.stopPlaying(inWorld);
 				}
 				WorldChangeListener.playInWorld.remove(worldName);
+				AudioBuffer.worldMusic.set(targetWorld.getName(), null);
+				try {
+					AudioBuffer.worldMusic.save(".//plugins//AudioBuffer//Cache//WorldMusic.abf");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			} else {
 				sender.sendMessage(ChatColor.RED+"请使用/abf stopInWorld [世界名称] ——在一个世界里停止播放音乐!");
 			}
@@ -204,6 +210,31 @@ public class AudioCommand implements CommandExecutor {
 				AudioBufferAPI.playFor(target, args[1]);
 			} else {
 				sender.sendMessage(ChatColor.RED+"请使用/abf stopAndPlaySelf [音乐名称] ——给自己播放(停下后)一个音乐");
+			}
+		} else if (args[0].equalsIgnoreCase("stopNearBy")) {
+			if (args.length == 5) {
+				String who = args[1];
+				if (isInt(args[2]) && isInt(args[3]) && isInt(args[4])) {
+					int x = Integer.valueOf(args[2]);
+					int y = Integer.valueOf(args[3]);
+					int z = Integer.valueOf(args[4]);
+					Player target = Bukkit.getPlayer(who);
+					if (target == null) {
+						sender.sendMessage(ChatColor.RED+"你指定的玩家不在线或不存在!");
+						return false;
+					}
+					for (Entity entity : target.getNearbyEntities(x, y, z)) {
+						if (entity instanceof Player) {
+							Player instance = (Player)entity;
+							AudioBufferAPI.stopPlaying(instance);
+						}
+					}
+					AudioBufferAPI.stopPlaying(target);
+				} else {
+					sender.sendMessage(ChatColor.RED+"请输入正确的数字.");
+				}
+			} else {
+				sender.sendMessage(ChatColor.RED+"请使用/abf stopNearBy [玩家名] [x] [y] [z] ——一一个玩家为立体图形的中心,xyz为长宽高,在这个范围内的玩家都会播放音效(包括该玩家)");
 			}
 		}
 		return false;

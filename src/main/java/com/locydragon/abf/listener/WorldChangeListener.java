@@ -1,5 +1,6 @@
 package com.locydragon.abf.listener;
 
+import com.locydragon.abf.AudioBuffer;
 import com.locydragon.abf.api.AudioBufferAPI;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,7 +18,9 @@ public class WorldChangeListener implements Listener {
 			String musicType = playInWorld.get(e.getPlayer().getWorld().getName());
 			AudioBufferAPI.playFor(e.getPlayer(), musicType);
 		} else {
-			AudioBufferAPI.stopPlaying(e.getPlayer());
+			if (AudioBuffer.buffer.getConfig().getBoolean("WorldChangeStopMusic", true)) {
+				AudioBufferAPI.stopPlaying(e.getPlayer());
+			}
 		}
 	}
 }

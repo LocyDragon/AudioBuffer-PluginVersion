@@ -1,3 +1,4 @@
+WorldChangeStopMusic: true
 MusicList:
   TestMusic:
     param: "[Net]http://music.163.com/song/media/outer/url?id=1325054538.mp3"
