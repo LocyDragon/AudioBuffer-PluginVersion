@@ -1,6 +1,6 @@
 name: AudioBuffer
 main: com.locydragon.abf.AudioBuffer
-version: 1.0.2
+version: 1.0.3
 author: LocyDragon
 commands:
   abf:

@@ -19,6 +19,8 @@ public class AudioBuffer extends JavaPlugin {
 	public static AudioBuffer buffer;
 	public static FileConfiguration save;
 	public static FileConfiguration worldMusic;
+
+	public static boolean isCitizensOnServer = false;
 	@Override
 	public void onEnable() {
 		Bukkit.getMessenger().registerOutgoingPluginChannel(this, "AudioBuffer");
@@ -34,6 +36,10 @@ public class AudioBuffer extends JavaPlugin {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+		if (Bukkit.getPluginManager().getPlugin("Citizens") != null ||
+				Bukkit.getPluginManager().getPlugin("Citizens2") != null) {
+			isCitizensOnServer = true;
 		}
 		Bukkit.getPluginCommand("abf").setExecutor(new AudioCommand());
 		Bukkit.getPluginCommand("ab").setExecutor(new AudioCommand());

@@ -3,6 +3,7 @@ import com.locydragon.abf.AudioBuffer;
 import com.locydragon.abf.api.AudioBufferAPI;
 import com.locydragon.abf.listener.WorldChangeListener;
 import com.locydragon.abf.listener.core.PlayerLoopThreadAche;
+import com.locydragon.abf.util.NpcUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -145,7 +146,8 @@ public class AudioCommand implements CommandExecutor {
 						return false;
 					}
 					for (Entity entity : target.getNearbyEntities(x, y, z)) {
-						if (entity instanceof Player) {
+						if (entity instanceof Player && !(entity.equals(target))
+								&& !NpcUtils.isNPC(entity)) {
 							Player instance = (Player)entity;
 							AudioBufferAPI.playFor(instance, musicType);
 						}
@@ -224,7 +226,8 @@ public class AudioCommand implements CommandExecutor {
 						return false;
 					}
 					for (Entity entity : target.getNearbyEntities(x, y, z)) {
-						if (entity instanceof Player) {
+						if (entity instanceof Player && !(entity.equals(target))
+								&& !NpcUtils.isNPC(entity)) {
 							Player instance = (Player)entity;
 							AudioBufferAPI.stopPlaying(instance);
 						}
